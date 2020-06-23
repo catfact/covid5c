@@ -1,5 +1,5 @@
 classdef SubPops
-
+    
     properties
         totalSusPop
         totalExpPop
@@ -37,10 +37,10 @@ classdef SubPops
         held_iStud
         heldStud
     end
-
+    
     methods
         function res = SubPops(y)
-
+            
             % Sums
             res.totalSusPop = 0;
             res.totalExpPop = 0;
@@ -49,7 +49,7 @@ classdef SubPops
             res.totalMedPop = 0;
             res.totalDeadPop = 0;
             res.totalHeldPop = 0;
-
+            
             % Admin/Teaching
             n = 0; % categories 1 - 4
             res.susAdminTeach = y(:,8*n+1) + y(:,8*(n+1)+1) + y(:,8*(n+2)+1) + y(:,8*(n+3)+1);
@@ -61,8 +61,8 @@ classdef SubPops
             res.held_sAdminTeach = y(:,8*n+7) + y(:,8*(n+1)+7) + y(:,8*(n+2)+7) + y(:,8*(n+3)+7);
             res.held_eAdminTeach = y(:,8*n+8) + y(:,8*(n+1)+8) + y(:,8*(n+2)+8) + y(:,8*(n+3)+8);
             res.heldAdminTeach = res.held_sAdminTeach + res.held_eAdminTeach;
-
-
+            
+            
             % Staff
             n = 4; % categories 5 - 8
             res.susStaff = y(:,8*n+1) + y(:,8*(n+1)+1) + y(:,8*(n+2)+1) + y(:,8*(n+3)+1);
@@ -74,8 +74,8 @@ classdef SubPops
             res.held_sStaff = y(:,8*n+7) + y(:,8*(n+1)+7) + y(:,8*(n+2)+7) + y(:,8*(n+3)+7);
             res.held_eStaff = y(:,8*n+8) + y(:,8*(n+1)+8) + y(:,8*(n+2)+8) + y(:,8*(n+3)+8);
             res.heldStaff = res.held_sStaff + res.held_eStaff;
-
-
+            
+            
             % Students
             n = 8; % categories 9 and 10
             res.susStud = y(:,8*n+1) + y(:,8*(n+1)+1);
@@ -86,11 +86,11 @@ classdef SubPops
             res.deadStud = y(:,8*n+6) + y(:,8*(n+1)+6);
             res.held_sStud = y(:,8*n+7) + y(:,8*(n+1)+7);
             res.held_eStud = y(:,8*n+8) + y(:,8*(n+1)+8);
-
+            
             % Non-compliant Students
             res.held_iStud = y(:,end);
             res.heldStud = res.held_sStud + res.held_eStud + res.held_iStud;
-
+            
             for i = 1:80
                 if mod(i,8) == 1
                     res.totalSusPop = res.totalSusPop + y(:, i);
@@ -115,82 +115,82 @@ classdef SubPops
                 end
             end
             res.totalHeldPop = res.totalHeldPop + y(:,end);  % add H_I for NC Students
-
+            
         end % constructor
-
-
+        
+        
         function z = extract(obj, label)
             switch(label)
-              case 'totalSusPop':
-		z = totalSusPop
-	      case 'totalExpPop':
-		z = totalExpPop
-	      case 'totalInfPop':
-		z = totalInfPop
-	      case 'totalRecPop':
-		z = totalRecPop
-	      case 'totalMedPop':
-		z = totalMedPop
-	      case 'totalDeadPop':
-		z = totalDeadPop
-	      case 'totalHeldPop':
-		z = totalHeldPop
-	      case 'susAdminTeach':
-		z = susAdminTeach
-	      case 'expAdminTeach':
-		z = expAdminTeach
-	      case 'infAdminTeach':
-		z = infAdminTeach
-	      case 'recAdminTeach':
-		z = recAdminTeach
-	      case 'medAdminTeach':
-		z = medAdminTeach
-	      case 'deadAdminTeach':
-		z = deadAdminTeach
-	      case 'held':
-		z = held_sAdminTeach
-	      case 'held':
-		z = held_eAdminTeach
-	      case 'heldAdminTeach':
-		z = heldAdminTeach
-	      case 'susStaff':
-		z = susStaff
-	      case 'expStaff':
-		z = expStaff
-	      case 'infStaff':
-		z = infStaff
-	      case 'recStaff':
-		z = recStaff
-	      case 'medStaff':
-		z = medStaff
-	      case 'deadStaff':
-		z = deadStaff
-	      case 'held':
-		z = held_sStaff
-	      case 'held':
-		z = held_eStaff
-	      case 'heldStaff':
-		z = heldStaff
-	      case 'susStud':
-		z = susStud
-	      case 'expStud':
-		z = expStud
-	      case 'infStud':
-		z = infStud
-	      case 'recStud':
-		z = recStud
-	      case 'medStud':
-		z = medStud
-	      case 'deadStud':
-		z = deadStud
-	      case 'held':
-		z = held_sStud
-	      case 'held':
-		z = held_eStud
-	      case 'held':
-		z = held_iStud
-	      case 'heldStud':
-		z = heldStud
+                case 'totalSusPop'
+                  z = obj.totalSusPop;
+                case 'totalExpPop'
+                  z = obj.totalExpPop;
+                case 'totalInfPop'
+                  z = obj.totalInfPop;
+                case 'totalRecPop'
+                  z = obj.totalRecPop;
+                case 'totalMedPop'
+                  z = obj.totalMedPop;
+                case 'totalDeadPop'
+                  z = obj.totalDeadPop;
+                case 'totalHeldPop'
+                  z = obj.totalHeldPop;
+                case 'susAdminTeach'
+                  z = obj.susAdminTeach;
+                case 'expAdminTeach'
+                  z = obj.expAdminTeach;
+                case 'infAdminTeach'
+                  z = obj.infAdminTeach;
+                case 'recAdminTeach'
+                  z = obj.recAdminTeach;
+                case 'medAdminTeach'
+                  z = obj.medAdminTeach;
+                case 'deadAdminTeach'
+                  z = obj.deadAdminTeach;
+                case 'held_sAdminTeach'
+                  z = obj.held_sAdminTeach;
+                case 'held_eAdminTeach'
+                  z = obj.held_eAdminTeach;
+                case 'heldAdminTeach'
+                  z = obj.heldAdminTeach;
+                case 'susStaff'
+                  z = obj.susStaff;
+                case 'expStaff'
+                  z = obj.expStaff;
+                case 'infStaff'
+                  z = obj.infStaff;
+                case 'recStaff'
+                  z = obj.recStaff;
+                case 'medStaff'
+                  z = obj.medStaff;
+                case 'deadStaff'
+                  z = obj.deadStaff;
+                case 'held'
+                  z = obj.held_sStaff;
+                case 'held'
+                  z = obj.held_eStaff;
+                case 'heldStaff'
+                  z = obj.heldStaff;
+                case 'susStud'
+                  z = obj.susStud;
+                case 'expStud'
+                  z = obj.expStud;
+                case 'infStud'
+                  z = obj.infStud;
+                case 'recStud'
+                  z = obj.recStud;
+                case 'medStud'
+                  z = obj.medStud;
+                case 'deadStud'
+                  z = obj.deadStud;
+                case 'held_sStud'
+                  z = obj.held_sStud;
+                case 'held_eStud'
+                  z = obj.held_eStud;
+                case 'held_iStud'
+                  z = obj.held_iStud;
+                case 'heldStud'
+                  z = obj.heldStud;
             end
         end % extract
     end % methods

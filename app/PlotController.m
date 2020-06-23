@@ -3,13 +3,12 @@ classdef PlotController
     properties
         results ModelResults
         pops SubPops
+        
     end
     
     methods
         
         function obj = PlotController()
-            %obj.results = ModelResults();
-            %obj.pops = SubPops(obj.results);
         end
         
         function obj = update(obj, results)
