@@ -12,14 +12,14 @@ classdef AppInputs
     icSRecC
     icSExpNC
     icSRecNC
-    propNC
     soAdminTeachHR
     soAdminTeachLR
     soStaffHR
     soStaffLR
     soSC
     soSNC
-    scaletracking
+    propNC
+    scaleTracking
     incAsymp
 
   end
