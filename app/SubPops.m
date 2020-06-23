@@ -8,7 +8,6 @@ classdef SubPops
         totalMedPop
         totalDeadPop
         totalHeldPop
-
         susAdminTeach
         expAdminTeach
         infAdminTeach
@@ -18,7 +17,6 @@ classdef SubPops
         held_sAdminTeach
         held_eAdminTeach
         heldAdminTeach
-
         susStaff
         expStaff
         infStaff
@@ -28,7 +26,6 @@ classdef SubPops
         held_sStaff
         held_eStaff
         heldStaff
-
         susStud
         expStud
         infStud
@@ -122,9 +119,78 @@ classdef SubPops
         end % constructor
 
 
-        function extract(obj, label)
+        function z = extract(obj, label)
             switch(label)
-                case ''
+              case 'totalSusPop':
+		z = totalSusPop
+	      case 'totalExpPop':
+		z = totalExpPop
+	      case 'totalInfPop':
+		z = totalInfPop
+	      case 'totalRecPop':
+		z = totalRecPop
+	      case 'totalMedPop':
+		z = totalMedPop
+	      case 'totalDeadPop':
+		z = totalDeadPop
+	      case 'totalHeldPop':
+		z = totalHeldPop
+	      case 'susAdminTeach':
+		z = susAdminTeach
+	      case 'expAdminTeach':
+		z = expAdminTeach
+	      case 'infAdminTeach':
+		z = infAdminTeach
+	      case 'recAdminTeach':
+		z = recAdminTeach
+	      case 'medAdminTeach':
+		z = medAdminTeach
+	      case 'deadAdminTeach':
+		z = deadAdminTeach
+	      case 'held':
+		z = held_sAdminTeach
+	      case 'held':
+		z = held_eAdminTeach
+	      case 'heldAdminTeach':
+		z = heldAdminTeach
+	      case 'susStaff':
+		z = susStaff
+	      case 'expStaff':
+		z = expStaff
+	      case 'infStaff':
+		z = infStaff
+	      case 'recStaff':
+		z = recStaff
+	      case 'medStaff':
+		z = medStaff
+	      case 'deadStaff':
+		z = deadStaff
+	      case 'held':
+		z = held_sStaff
+	      case 'held':
+		z = held_eStaff
+	      case 'heldStaff':
+		z = heldStaff
+	      case 'susStud':
+		z = susStud
+	      case 'expStud':
+		z = expStud
+	      case 'infStud':
+		z = infStud
+	      case 'recStud':
+		z = recStud
+	      case 'medStud':
+		z = medStud
+	      case 'deadStud':
+		z = deadStud
+	      case 'held':
+		z = held_sStud
+	      case 'held':
+		z = held_eStud
+	      case 'held':
+		z = held_iStud
+	      case 'heldStud':
+		z = heldStud
             end
         end % extract
     end % methods
