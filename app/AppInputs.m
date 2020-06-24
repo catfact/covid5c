@@ -38,8 +38,8 @@ classdef AppInputs
             obj.icSRecC = .05 * 100;
             obj.icSExpNC = .01 * 100;
             obj.icSRecNC = .05 * 100;
-            obj.soATHR = .05 * 100;
-            obj.soATLR = 0.2 * 100;
+            obj.soATHR = 0.5;
+            obj.soATLR = 1;
             obj.soStaffHR = 1;
             obj.soStaffLR = 1;
             obj.soSC = 1;
