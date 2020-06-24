@@ -6,13 +6,15 @@
 
 function [t,y]=COVID5C_Run_App(icATExpHR, icATRecHR,icATExpLR, icATRecLR, ...
                                 icStaffExpHR,icStaffRecHR,icStaffExpLR,icStaffRecLR,  icSExpC, icSRecC,icSExpNC, icSRecNC, ...
-                                propNC,soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, scaletracking,incAsymp)
+                                soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, propNC, scaletracking, incAsymp)
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 %--Get parameters-------------------------------------------------------------------------------------------------------------------------------------------------
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 %run('COVID5C_SetParameters.m')
 %run('COVID_LAData.m')
 %run('EstimateBetas.m')  
+
+disp(propNC);
 
 COVID5C_SetParameters;
 COVID_LAData;
