@@ -10,9 +10,12 @@ function [t,y]=COVID5C_Run_App(icAdminTeachExpHR, icAdminTeachRecHR,icAdminTeach
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 %--Get parameters-------------------------------------------------------------------------------------------------------------------------------------------------
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-run('COVID5C_SetParameters.m')
-run('COVID_LAData.m')
-run('EstimateBetas.m')  
+%run('COVID5C_SetParameters.m')
+%run('COVID_LAData.m')
+%run('EstimateBetas.m')  
+COVID5C_SetParameters;
+COVID_LAData;
+EstimateBetas;
 
 % increase infectivity of asympatomatic group
 pars(1,:) = incAsymp*pars(1,:);

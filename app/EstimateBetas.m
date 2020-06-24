@@ -40,8 +40,13 @@ StudentPop = PomonaStudentPop + PitzerStudentPop;  % only use these for now
 % Since we divide by this vector, make sure all entries are at least one.
 if ~exist('propNC','var')
     propNC = .1;
+else
+    disp(propNC);
+    if isEmpty(propNC)
+        propNC = .1;
+    end
 end
-    FracCompliant = 1-propNC  % argument to COVID5C_Run
+    FracCompliant = 1-propNC;  % argument to COVID5C_Run
 
 pop = max([StaffPops, FracCompliant*StudentPop , StudentPop*(1-FracCompliant)],ones(1,Ngroups));
 
