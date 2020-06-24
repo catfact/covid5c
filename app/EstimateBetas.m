@@ -40,34 +40,87 @@ StudentPop = PomonaStudentPop + PitzerStudentPop;  % only use these for now
 % Since we divide by this vector, make sure all entries are at least one.
 if ~exist('propNC','var')
     propNC = .1;
-else
-    FracCompliant = 1-propNC;  % argument to COVID5C_Run
 end
-pop = max([StaffPops, FracCompliant*StudentPop , StudentPop*(1-FracCompliant)],ones(1,Ngroups))
+    FracCompliant = 1-propNC  % argument to COVID5C_Run
+
+pop = max([StaffPops, FracCompliant*StudentPop , StudentPop*(1-FracCompliant)],ones(1,Ngroups));
 
 % Start with relative beta values: relative to beta_star which was
 % estimated from the LA Data
 % RelBetas(i,j) is the beta FROM group i infected TO group j, susceptibles.
-RelBetas = .2*ones(Ngroups,Ngroups);  % smallest level - make smaller?
-RelBetas(10,10) = 10;  % non-compliant to non-compliant
-RelBetas(10,9) = 5;
-RelBetas(10,1) = 3;
-RelBetas(10,3) = 3;
-RelBetas(10,5) = 3;
-RelBetas(10,7) = 3;
-RelBetas(10,2) = 1;
-RelBetas(10,4) = 1;
-RelBetas(10,6) = 1;
-RelBetas(10,8) = 1;
-RelBetas(9,:) = .5; % lower?
-RelBetas(9,10) = 5; 
+basevalue=0.1;
+AT_HRtoHR=0.1;                            %AdminTeach the HR to HR rate
+St_HRtoHR=0.1;                            %Staff the HR to HR rate
+AT_LRtoLR=0.25;                           %AdminTeach the LR to LR rate
+St_LRtoLR=0.25;                           %Staff the LR to LR rate
+AT_St_LR=0.15;                            %AdminTeach to the Staff all LR rate
+St_AT_LR=0.15;                            %Staff to the AdminTeach all LR rate
+HR_HSC_S=0.05;                            %AdminTeach and Staff HR_HSC to Students rate
+HR_LSC_S=0.01;                            %AdminTeach and Staff HR_LSC to Students rate
+LR_HSC_S=0.15;                            %AdminTeach and Staff LR_HSC to Students rate
+LR_LSC_S=0.01;                            %AdminTeach and Staff LR_LSC to Students rate
+C_HSC=0.05;                               %Compliant Students to HSC rate
+C_LSC=0.5;                                %Compliant Students to LSC rate
+NC_HSC=0.1;                               %Non Compliant Students to HSC rate
+NC_LSC=1;                                 %Non Compliant Students to LSC rate
+C_C=0.75;                                 %Compliant Students to Compliant Students rate
+C_NC=1.25;                                %Compliant Students to Non Compliant Students rate
+NC_C=1.25;                                %Non Compliant Students to Compliant Students rate
+NC_NC=2;                                  %Non Compliant Students to Non Compliant Students rate
+
+
+RelBetas = basevalue*ones(Ngroups,Ngroups);  % smallest level - make smaller?
+
+RelBetas(1,1)=AT_HRtoHR; RelBetas(2,1)=AT_HRtoHR; RelBetas(1,2)=AT_HRtoHR; RelBetas(2,2)=AT_HRtoHR;
+
+RelBetas(5,5)=St_HRtoHR; RelBetas(6,5)=St_HRtoHR; RelBetas(5,6)=St_HRtoHR; RelBetas(6,6)=St_HRtoHR;
+
+RelBetas(3,3)=AT_LRtoLR; RelBetas(4,3)=AT_LRtoLR; RelBetas(3,4)=AT_LRtoLR; RelBetas(4,4)=AT_LRtoLR;
+
+RelBetas(7,7)=St_LRtoLR; RelBetas(8,7)=St_LRtoLR; RelBetas(7,8)=St_LRtoLR; RelBetas(8,8)=St_LRtoLR;
+
+RelBetas(7,3)=AT_St_LR; RelBetas(8,3)=AT_St_LR; RelBetas(7,4)=AT_St_LR; RelBetas(8,4)=AT_St_LR;
+
+RelBetas(3,7)=St_AT_LR; RelBetas(3,8)=St_AT_LR; RelBetas(4,7)=St_AT_LR; RelBetas(4,8)=St_AT_LR;
+
+RelBetas(9,1)=HR_HSC_S; RelBetas(9,5)=HR_HSC_S; RelBetas(10,1)=HR_HSC_S; RelBetas(10,5)=HR_HSC_S;
+
+RelBetas(9,2)=HR_LSC_S; RelBetas(9,6)=HR_LSC_S; RelBetas(10,2)=HR_LSC_S; RelBetas(10,6)=HR_LSC_S;
+
+RelBetas(9,3)=LR_HSC_S; RelBetas(9,7)=LR_HSC_S; RelBetas(10,3)=LR_HSC_S; RelBetas(10,7)=LR_HSC_S;
+
+RelBetas(9,4)=LR_LSC_S; RelBetas(9,8)=LR_LSC_S; RelBetas(10,4)=LR_LSC_S; RelBetas(10,8)=LR_LSC_S;
+
+RelBetas(1,9)=C_HSC; RelBetas(3,9)=C_HSC; RelBetas(5,9)=C_HSC; RelBetas(7,9)=C_HSC;
+
+RelBetas(2,9)=C_LSC; RelBetas(4,9)=C_LSC; RelBetas(6,9)=C_LSC; RelBetas(8,9)=C_LSC;
+
+RelBetas(1,10)=NC_HSC; RelBetas(3,10)=NC_HSC; RelBetas(5,10)=NC_HSC; RelBetas(7,10)=NC_HSC;
+
+RelBetas(2,10)=NC_LSC; RelBetas(4,10)=NC_LSC; RelBetas(6,10)=NC_LSC; RelBetas(8,10)=NC_LSC;
+
+RelBetas(9,9)=C_C; RelBetas(10,9)=C_NC; RelBetas(9,10)=NC_C; RelBetas(10,10)=NC_NC;
+
+
+% RelBetas(10,10) = 10;  % non-compliant to non-compliant
+% RelBetas(9,10) = 5;
+% RelBetas(1,10) = 3;
+% RelBetas(3,10) = 3;
+% RelBetas(5,10) = 3;
+% RelBetas(7,10) = 3;
+% RelBetas(2,10) = 1;
+% RelBetas(4,10) = 1;
+% RelBetas(6,10) = 1;
+% RelBetas(8,10) = 1;
+% RelBetas(:,9) = .5; % lower?
+% RelBetas(10,9) = 5; 
 % Multiply by Beta_Star, and divide by population of the group containing
 % the susceptibles, i.e. group j for Beta_{ij}
 
 Betas = RelBetas;
 
 for i =1:length(RelBetas(:,1))
-    Betas(i,:) = beta_star*RelBetas(i,:)./pop;
+    Betas(:,i) = beta_star*RelBetas(:,i)./pop';
 end
 
 % Find age-dependent parameters
