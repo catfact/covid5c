@@ -2,11 +2,11 @@
 % Written by Maryann Hohn, edited by Ami Radunskaya and Christina Edholm
 % Last Edited June 23, 2020
 % Modified SEIR model
-% Run the ODEs with i.c.
+% % Run the ODEs with i.c.
 
-function [t,y]=COVID5C_Run_App(icAdminTeachExpHR, icAdminTeachRecHR,icAdminTeachExpLR, icAdminTeachRecLR, ...
+function [t,y]=COVID5C_Run_App(icATExpHR, icATRecHR,icATExpLR, icATRecLR, ...
                                 icStaffExpHR,icStaffRecHR,icStaffExpLR,icStaffRecLR,  icSExpC, icSRecC,icSExpNC, icSRecNC, ...
-                                propNC,soAdminTeachHR, soAdminTeachLR, soStaffHR, soStaffLR,  soSC, soSNC, scaletracking,incAsymp)
+                                propNC,soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, scaletracking,incAsymp)
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 %--Get parameters-------------------------------------------------------------------------------------------------------------------------------------------------
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ tspan = [0 tmax];
 % --Scale Outside--------------------------------------------------------------------------------------------------------------------------------------------
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-pars(15,:)=[soAdminTeachHR, soAdminTeachHR, soAdminTeachLR, soAdminTeachLR, soStaffHR, soStaffHR, soStaffLR, soStaffLR,  soSC, soSNC];   
+pars(15,:)=[soATHR, soATHR, soATLR, soATLR, soStaffHR, soStaffHR, soStaffLR, soStaffLR,  soSC, soSNC];   
 % List order: AdminTeac HR HSC, LSC; LR HSC, LSC;  Staff HR HSC, LSC; LR HSC, LSC; S LR C, S LR NC)
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -52,8 +52,8 @@ pars(15,:)=[soAdminTeachHR, soAdminTeachHR, soAdminTeachLR, soAdminTeachLR, soSt
 %  
 
 % List order: A/T HR HSC, LSC; LR HSC, LSC;  H/D/G HR HSC, LSC; LR HSC, LSC; S LR C, S LR NC)
-propExp = [icAdminTeachExpHR,icAdminTeachExpHR,icAdminTeachExpLR,icAdminTeachExpLR,icStaffExpHR,icStaffExpHR,icStaffExpLR,icStaffExpLR,icSExpC,icSExpNC];
-propRec = [icAdminTeachRecHR,icAdminTeachRecHR,icAdminTeachRecLR,icAdminTeachRecLR,icStaffRecHR,icStaffRecHR,icStaffRecLR,icStaffRecLR,icSRecC,icSRecNC]; 
+propExp = [icATExpHR,icATExpHR,icATExpLR,icATExpLR,icStaffExpHR,icStaffExpHR,icStaffExpLR,icStaffExpLR,icSExpC,icSExpNC];
+propRec = [icATRecHR,icATRecHR,icATRecLR,icATRecLR,icStaffRecHR,icStaffRecHR,icStaffRecLR,icStaffRecLR,icSRecC,icSRecNC]; 
 
 propInf = [      0,        0,     0,    0,       0,         0,     0,    0,    0,      0];  % assumed 0 for all classes at 5C
 propMed = [      0,        0,     0,    0,       0,         0,     0,    0,    0,      0];  % assumed 0 for all classes at 5C

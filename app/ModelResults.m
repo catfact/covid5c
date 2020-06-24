@@ -18,27 +18,27 @@ classdef ModelResults
             
             % extract populations
              n = 0; % classes 1 - 2
-            susAdminTeach_hr = y(:,8*n+1) + y(:,8*(n+1)+1) ;
-            expAdminTeach_hr = y(:,8*n+2) + y(:,8*(n+1)+2) ;
-            infAdminTeach_hr = y(:,8*n+3) + y(:,8*(n+1)+3) ;
-            recAdminTeach_hr = y(:,8*n+4) + y(:,8*(n+1)+4) ;
-            medAdminTeach_hr = y(:,8*n+5) + y(:,8*(n+1)+5);
-            deadAdminTeach_hr = y(:,8*n+6) + y(:,8*(n+1)+6) ;
-            held_sAdminTeach_hr = y(:,8*n+7) + y(:,8*(n+1)+7) ;
-            held_eAdminTeach_hr = y(:,8*n+8) + y(:,8*(n+1)+8) ;
-            heldAdminTeach_hr = held_sAdminTeach_hr + held_eAdminTeach_hr;
+            susAT_hr = y(:,8*n+1) + y(:,8*(n+1)+1) ;
+            expAT_hr = y(:,8*n+2) + y(:,8*(n+1)+2) ;
+            infAT_hr = y(:,8*n+3) + y(:,8*(n+1)+3) ;
+            recAT_hr = y(:,8*n+4) + y(:,8*(n+1)+4) ;
+            medAT_hr = y(:,8*n+5) + y(:,8*(n+1)+5);
+            deadAT_hr = y(:,8*n+6) + y(:,8*(n+1)+6) ;
+            held_sAT_hr = y(:,8*n+7) + y(:,8*(n+1)+7) ;
+            held_eAT_hr = y(:,8*n+8) + y(:,8*(n+1)+8) ;
+            heldAT_hr = held_sAT_hr + held_eAT_hr;
             
             % Admin/Teaching - Low Risk
             n = 0; % classes 3 - 4
-            susAdminTeach_lr = y(:,8*(n+2)+1) + y(:,8*(n+3)+1);
-            expAdminTeach_lr =  y(:,8*(n+2)+2) + y(:,8*(n+3)+2);
-            infAdminTeach_lr = y(:,8*(n+2)+3) + y(:,8*(n+3)+3);
-            recAdminTeach_lr =  y(:,8*(n+2)+4) + y(:,8*(n+3)+4);
-            medAdminTeach_lr =  y(:,8*(n+2)+5) + y(:,8*(n+3)+5);
-            deadAdminTeach_lr =  y(:,8*(n+2)+6) + y(:,8*(n+3)+6);
-            held_sAdminTeach_lr = y(:,8*(n+2)+7) + y(:,8*(n+3)+7);
-            held_eAdminTeach_lr =  y(:,8*(n+2)+8) + y(:,8*(n+3)+8);
-            heldAdminTeach_lr = held_sAdminTeach_lr + held_eAdminTeach_lr;
+            susAT_lr = y(:,8*(n+2)+1) + y(:,8*(n+3)+1);
+            expAT_lr =  y(:,8*(n+2)+2) + y(:,8*(n+3)+2);
+            infAT_lr = y(:,8*(n+2)+3) + y(:,8*(n+3)+3);
+            recAT_lr =  y(:,8*(n+2)+4) + y(:,8*(n+3)+4);
+            medAT_lr =  y(:,8*(n+2)+5) + y(:,8*(n+3)+5);
+            deadAT_lr =  y(:,8*(n+2)+6) + y(:,8*(n+3)+6);
+            held_sAT_lr = y(:,8*(n+2)+7) + y(:,8*(n+3)+7);
+            held_eAT_lr =  y(:,8*(n+2)+8) + y(:,8*(n+3)+8);
+            heldAT_lr = held_sAT_lr + held_eAT_lr;
             
             
             % Staff_hr
@@ -93,13 +93,13 @@ classdef ModelResults
             heldStud_nc = held_sStud_nc + held_eStud_nc + held_iStud_nc;
             
             %% Put columns from each class into a matrix
-            obj.Susceptibles = [susAdminTeach_hr, susAdminTeach_lr, susStaff_hr, susStaff_lr, susStud_c, susStud_nc];
-            obj.Exposed = [expAdminTeach_hr, expAdminTeach_lr, expStaff_hr, expStaff_lr, expStud_c, expStud_nc];
-            obj.Infected = [infAdminTeach_hr, infAdminTeach_lr, infStaff_hr, infStaff_lr, infStud_c, infStud_nc];
-            obj.Recovered = [recAdminTeach_hr, recAdminTeach_lr, recStaff_hr, recStaff_lr, recStud_c, recStud_nc];
-            obj.Med = [medAdminTeach_hr, medAdminTeach_lr, medStaff_hr, medStaff_lr, medStud_c, medStud_nc];
-            obj.Dead = [deadAdminTeach_hr, deadAdminTeach_lr, deadStaff_hr, deadStaff_lr, deadStud_c, deadStud_nc];
-            obj.Held = [heldAdminTeach_hr, heldAdminTeach_lr, heldStaff_hr, heldStaff_lr, heldStud_c, heldStud_nc];
+            obj.Susceptibles = [susAT_hr, susAT_lr, susStaff_hr, susStaff_lr, susStud_c, susStud_nc];
+            obj.Exposed = [expAT_hr, expAT_lr, expStaff_hr, expStaff_lr, expStud_c, expStud_nc];
+            obj.Infected = [infAT_hr, infAT_lr, infStaff_hr, infStaff_lr, infStud_c, infStud_nc];
+            obj.Recovered = [recAT_hr, recAT_lr, recStaff_hr, recStaff_lr, recStud_c, recStud_nc];
+            obj.Med = [medAT_hr, medAT_lr, medStaff_hr, medStaff_lr, medStud_c, medStud_nc];
+            obj.Dead = [deadAT_hr, deadAT_lr, deadStaff_hr, deadStaff_lr, deadStud_c, deadStud_nc];
+            obj.Held = [heldAT_hr, heldAT_lr, heldStaff_hr, heldStaff_lr, heldStud_c, heldStud_nc];
         end
         
          function z = selectPops(obj, selection)

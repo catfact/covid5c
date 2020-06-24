@@ -1,9 +1,9 @@
 classdef AppInputs
     properties
-        icAdminTeachExpHR
-        icAdminTeachRecHR
-        icAdminTeachExpLR
-        icAdminTeachRecLR
+        icATExpHR
+        icATRecHR
+        icATExpLR
+        icATRecLR
         icStaffExpHR
         icStaffRecHR
         icStaffExpLR
@@ -12,8 +12,8 @@ classdef AppInputs
         icSRecC
         icSExpNC
         icSRecNC
-        soAdminTeachHR
-        soAdminTeachLR
+        soATHR
+        soATLR
         soStaffHR
         soStaffLR
         soSC
@@ -26,10 +26,10 @@ classdef AppInputs
     
     methods
         function obj = AppInputs()
-            obj.icAdminTeachExpHR = .005 * 100;
-            obj.icAdminTeachRecHR = .05 * 100;
-            obj.icAdminTeachExpLR = .015 * 100;
-            obj.icAdminTeachRecLR = .05 * 100;
+            obj.icATExpHR = .005 * 100;
+            obj.icATRecHR = .05 * 100;
+            obj.icATExpLR = .015 * 100;
+            obj.icATRecLR = .05 * 100;
             obj.icStaffExpHR = .005 * 100;
             obj.icStaffRecHR = .05 * 100;
             obj.icStaffExpLR = .01 * 100;
@@ -38,8 +38,8 @@ classdef AppInputs
             obj.icSRecC = .05 * 100;
             obj.icSExpNC = .01 * 100;
             obj.icSRecNC = .05 * 100;
-            obj.soAdminTeachHR = .05 * 100;
-            obj.soAdminTeachLR = 0.5 * 100;
+            obj.soATHR = .05 * 100;
+            obj.soATLR = 0.2 * 100;
             obj.soStaffHR = 1;
             obj.soStaffLR = 1;
             obj.soSC = 1;
