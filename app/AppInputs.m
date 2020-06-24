@@ -44,9 +44,9 @@ classdef AppInputs
             obj.soStaffLR = 1;
             obj.soSC = 1;
             obj.soSNC = 1;
-            obj.propNC = 1;
-            obj.scaleTracking = 1;
-            obj.incAsymp = 1;
+            obj.propNC = 100;
+            obj.scaleTracking = 100;
+            obj.incAsymp = 100;
         end
     end
     
