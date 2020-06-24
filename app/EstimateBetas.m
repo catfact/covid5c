@@ -38,14 +38,9 @@ HMCStudentPop = 807;
 StudentPop = PomonaStudentPop + PitzerStudentPop;  % only use these for now
 % Population vector: start with all students non-compliant.
 % Since we divide by this vector, make sure all entries are at least one.
-if ~exist('propNC','var')
-    propNC = .1;
-else
-    disp(propNC);
-    if isEmpty(propNC)
-        propNC = .1;
-    end
-end
+%if ~exist('propNC','var')
+%    propNC = .1;
+%end
     FracCompliant = 1-propNC;  % argument to COVID5C_Run
 
 pop = max([StaffPops, FracCompliant*StudentPop , StudentPop*(1-FracCompliant)],ones(1,Ngroups));

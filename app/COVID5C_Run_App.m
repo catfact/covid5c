@@ -13,6 +13,7 @@ function [t,y]=COVID5C_Run_App(icAdminTeachExpHR, icAdminTeachRecHR,icAdminTeach
 %run('COVID5C_SetParameters.m')
 %run('COVID_LAData.m')
 %run('EstimateBetas.m')  
+
 COVID5C_SetParameters;
 COVID_LAData;
 EstimateBetas;
