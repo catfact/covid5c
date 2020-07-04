@@ -16,25 +16,22 @@ numOfCategories = 10;
 % for all but the non-compliant students, there are 8 states.  
 % Add H_I for non-compliant students
 % (S,E,I,R,M,D,H_S,H_E) 
-numOfStates = 8;
+numOfStates = 13;
 
 alpha = pars(1,:);
 beta = Betas; % removed from pars to because it's a matrix per Nina's paper
 deltaI = pars(2,:);
 deltaM = pars(3,:);
-eta = pars(16,:); % unused
-g = pars(15,:);
 gammaI = pars(4,:);
 gammaR = pars(5,:);
 kappa = pars(6,:);
 Mmax = pars(7,:);
 muI = pars(8,:);
 muM = pars(9,:);
-omegaH = pars(10,:);  % unused ?
-omegaI = pars(11,:);
-rhoR = pars(12,:); % unused 
-rhoS = pars(13,:);
-sigma = pars(14,:);
+omegaI = pars(10,:);
+rhoS = pars(11,:);
+sigma = pars(12,:);
+g = pars(13,:);
 
 % Initiate DE variables
 dydt = [zeros(numOfStates*numOfCategories,1); 0]; % add an additional 0 for dH_I/dt for NC students
@@ -53,7 +50,11 @@ H_I = 0;
 
 % Vector of infected for each category
 indices = 1:numOfStates:(1 + numOfStates*(numOfCategories-1));
-infVector = y(indices+2);
+% multiply vector of infected  by a vector of scalars, mostly zero, except
+% for the non-compliant students.
+c = zeros(numOfCategories,1);
+c(10) = 1;
+infVector = c.*y(indices+2);
 % Vector of exposed for each category
 expVector = y(indices+1);
 
@@ -69,14 +70,13 @@ for i = 1:(numOfCategories-1)
     H_S(i) = y(j+7);
     H_E(i) = y(j+8);
     
-    % g*beta*(I(students who infect others)+alpha*E)
     % make sure g, infVector, alpha, expVector are column vectors
     g=reshape(g,numOfCategories,1);
     alpha = reshape(alpha,numOfCategories,1);
+    % susc to exposed term
     expTerm = beta(i,:)*(g + infVector + alpha.*expVector);
     % susc to held term - contact tracing
     heldTerm = kappa(i)*sigma(i)*(I(i)/(1+I(i)))*(1/(1 + S(i)+E(i)+I(i)+R(i)));
-    %heldTerm = (y(7*11+3)+y(7*13+3))/((y(7*11+3)+y(7*13+3)) + sigma(i));
     % inf to medical - saturation of medical facilities
     medTerm = omegaI(i)*exp(-(M(i)/Mmax(i))^2);
     % dS/dt
@@ -95,10 +95,23 @@ for i = 1:(numOfCategories-1)
     dydt(j+7) = heldTerm*S(i) - rhoS(i)*H_S(i);
     % dH_Edt
     dydt(j+8) = heldTerm*E(i) - (gammaR(i)+gammaI(i))*H_E(i);
+    % Cum Cases into S to E
+    dydt(j+9) = expTerm*S(i);
+    % Cum Cases E to I
+    dydt(j+10) = gammaI(i)*E(i);
+    % Cum Cases E to R
+    dydt(j+11) = gammaR(i)*E(i);
+    % Cum Cases H_E to I
+    dydt(j+12) = gammaI(i)*H_E(i);
+    % Cum Cases H_E to R
+    dydt(j+13) = gammaR(i)*H_E(i);
 end 
+
+%%-------------------------------
 % for non-compliant students
+%%-------------------------------
 i = numOfCategories;
-j = numOfStates*(i-1);
+j = (numOfStates)*(i-1);
     S(i) = y(j+1);
     E(i) = y(j+2);
     I(i) = y(j+3);
@@ -137,3 +150,13 @@ j = numOfStates*(i-1);
     dydt(j+8) = heldTerm*E(i) - (gammaR(i)+gammaI(i))*H_E(i);
     % dH_Idt
     dydt(j+9) = heldTerm*I(i) + gammaI(i)*H_E(i) - (medTerm + deltaI(i)+muI(i))*H_I;
+    % Cum Cases into S to E
+    dydt(j+10) = expTerm*S(i);
+    % Cum Cases into E to I
+    dydt(j+11) = gammaI(i)*E(i);
+    % Cum Cases into R from E
+    dydt(j+12) = gammaR(i)*E(i);
+    % Cum Cases into I from H_E
+    dydt(j+13) = gammaI(i)*H_E(i);
+    % Cum Cases into R from H_E
+    dydt(j+14) = gammaR(i)*H_E(i);

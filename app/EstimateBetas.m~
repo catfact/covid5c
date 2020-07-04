@@ -120,7 +120,7 @@ RelBetas(9,9)=C_C; RelBetas(10,9)=C_NC; RelBetas(9,10)=NC_C; RelBetas(10,10)=NC_
 % Multiply by Beta_Star, and divide by population of the group containing
 % the susceptibles, i.e. group j for Beta_{ij}
 
-RelBetas = 1*RelBetas;
+RelBetas = 10*RelBetas;
 
 % for i =1:length(RelBetas(:,1))
 %     Betas(:,i) = beta_star*RelBetas(:,i)./pop';
@@ -132,7 +132,7 @@ for i = 1:4
     Betas(:,i+4) = beta_star*RelBetas(:,i+4)/sum(staff_pop);
 end
 % Betas divide by their larger class (students)
-for i = 9:10
+for i = 1:2
     Betas(:,i) = beta_star*RelBetas(:,i)/StudentPop;
 end
 
@@ -202,6 +202,6 @@ pars(7,:) = pars(7,:)*Mmax;
 pars(8,:) = muI_vec;
 pars(9,:) = muM_vec;
 pars(10,:) = omegaI_vec;
-pars(11,:) = pars(11,:)*rhoS;
-pars(12,:) = pars(12,:)*sigma;
-%pars(13,:) = pars(13,:)*g;
+pars(1,:) = pars(12,:)*rhoS;
+pars(13,:) = pars(13,:)*sigma;
+pars(14,:) = pars(14,:)*g;

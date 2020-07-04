@@ -14,11 +14,14 @@ function [t,y]=COVID5C_Run_App(icATExpHR, icATRecHR,icATExpLR, icATRecLR, ...
 %run('COVID_LAData.m')
 %run('EstimateBetas.m')  
 
-disp(propNC);
+%disp(propNC);
 
 COVID5C_SetParameters;
 COVID_LAData;
 EstimateBetas;
+
+% Number of States
+numOfStates = 13;
 
 % increase infectivity of asympatomatic group
 pars(1,:) = incAsymp*pars(1,:);
@@ -33,7 +36,7 @@ tspan = [0 tmax];
 % --Scale Outside--------------------------------------------------------------------------------------------------------------------------------------------
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-pars(15,:)=[soATHR, soATHR, soATLR, soATLR, soStaffHR, soStaffHR, soStaffLR, soStaffLR,  soSC, soSNC] / 7;   
+pars(13,:)=[soATHR, soATHR, soATLR, soATLR, soStaffHR, soStaffHR, soStaffLR, soStaffLR,  soSC, soSNC] / 7;   
 % List order: AdminTeac HR HSC, LSC; LR HSC, LSC;  Staff HR HSC, LSC; LR HSC, LSC; S LR C, S LR NC)
 
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -67,11 +70,11 @@ propHeld_I = 0; % assumed 0
 propSus = 1-propExp - propRec;
 
 % Initalize ic vector
-ic = zeros(81,1); % 8 states for 10 categories, plus one H_I state
+ic = zeros(numOfStates*10+1,1); % 8 states for 10 categories, plus one H_I state
 
 % Divide population into each category
 for i=1:10
-    j = 8*(i-1);
+    j = numOfStates*(i-1);
     % dS/dt
     ic(j+1) = propSus(i)*pop(i);
     % dE/dt
@@ -90,7 +93,7 @@ for i=1:10
     ic(j+8) = propHeld_E(i)*pop(i);
 end
 
-ic(81)=propHeld_I*pop(10);
+ic(numOfStates*10+1)=propHeld_I*pop(10);
 
 %------------------------------------------------------------------------------------------------------------------------------------------------------------------
 % --Run ODE solver-----------------------------------------------------------------------------------------------------------------------------------------------
