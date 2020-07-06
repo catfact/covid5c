@@ -6,18 +6,17 @@
 
 function [t,y]=COVID5C_Run_App(icATExpHR, icATRecHR,icATExpLR, icATRecLR, ...
                                 icStaffExpHR,icStaffRecHR,icStaffExpLR,icStaffRecLR,  icSExpC, icSRecC,icSExpNC, icSRecNC, ...
-                                soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, propNC, scaletracking, incAsymp, betaScaling)
+                                soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, propNC, scaletracking, incAsymp, scale_beta)
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 %--Get parameters-------------------------------------------------------------------------------------------------------------------------------------------------
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------  
 
-scale_beta=5;
 scale_sigma=1;
 
 
 [pop,Betas, RelBetas, pars]=COVID5C_InputParameters(soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, propNC, scaletracking, incAsymp,scale_beta);
 
-pars(6,:)=scaletracking*ones(1,10);
+%pars(6,:)=scaletracking*ones(1,10);
  
 % Number of States, ODE Equations
 numOfStates = 13;
