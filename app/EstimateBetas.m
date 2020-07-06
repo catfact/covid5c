@@ -5,7 +5,7 @@
 % transmission rate.
 % Assumes COVID5C_SetParameters has been run so that all parameters are
 % defined.
-beta_star = beta*TotalPopulation;
+beta_star = beta * TotalPopulation * betaScaling;
 
 %% Number the different communities:
 

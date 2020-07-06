@@ -23,7 +23,7 @@ switch(idx)
         inputs.propNC = 0.25* 100;
         inputs.scaleTracking = .8 * 100;
         inputs.incAsymp = .75* 100;
-        
+        inputs.betaScaling = 100;
     case 2
         inputs.icATExpHR = 0;
         inputs.icATRecHR = .01* 100;
@@ -46,6 +46,7 @@ switch(idx)
         inputs.propNC = 0.75* 100;
         inputs.scaleTracking = .8* 100;
         inputs.incAsymp = .75* 100;
+        inputs.betaScaling = 100;
         
     case 3
         inputs.icATExpHR = 0.015* 100;
@@ -69,6 +70,6 @@ switch(idx)
         inputs.propNC = 0.5* 100;
         inputs.scaleTracking = .5* 100;
         inputs.incAsymp = .75* 100;
-        
+        inputs.betaScaling = 100;
 end
 end
