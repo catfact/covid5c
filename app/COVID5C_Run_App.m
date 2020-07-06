@@ -27,7 +27,7 @@ numOfStates = 13;
 pars(1,:) = incAsymp*pars(1,:);
 
 pars(6,:)=scaletracking*ones(1,10);
-
+ 
 %--# of simulation runs--
 tmax = 100; % time simulation stops
 tspan = [0 tmax];
