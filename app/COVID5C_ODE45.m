@@ -7,7 +7,7 @@
 % H/D/G LR = housekeeping and dining low risk HSC/LSC = 7, 8
 % S LR (C/NC) = low risk students compliant/not compliant = 11, 12
 
-function dydt = COVID5C_ODE45(t,y,pars, Betas)
+function dydt = COVID5C_ODE45(t,y,pars, Betas, RelBetas,scale_sigma)
 
 % Parameters---------------------
 % SEIR group order
@@ -57,6 +57,9 @@ c(10) = 1;
 infVector = c.*y(indices+2);
 % Vector of exposed for each category
 expVector = y(indices+1);
+% Vector for Held - Infected and number of contacts
+infVectorsigma = y(indices+2);
+sigma = scale_sigma*RelBetas*(infVectorsigma./(.1+infVectorsigma));
 
 % All but non-compliant students
 for i = 1:(numOfCategories-1)
@@ -70,13 +73,15 @@ for i = 1:(numOfCategories-1)
     H_S(i) = y(j+7);
     H_E(i) = y(j+8);
     
+    % g*beta*(I(students who infect others)+alpha*E)
     % make sure g, infVector, alpha, expVector are column vectors
     g=reshape(g,numOfCategories,1);
     alpha = reshape(alpha,numOfCategories,1);
-    % susc to exposed term
-    expTerm = beta(i,:)*(g + infVector + alpha.*expVector);
+    expTerm = beta(i,:)*(g + infVector + alpha.*expVector)
     % susc to held term - contact tracing
-    heldTerm = kappa(i)*sigma(i)*(I(i)/(1+I(i)))*(1/(1 + S(i)+E(i)+I(i)+R(i)));
+    heldTerm = kappa(i)*sigma(i)*(1/(1 + S(i)+E(i)+I(i)+R(i)))
+    %heldTerm = kappa(i)*sigma(i)*(I(i)/(1+I(i)))*(1/(1 + S(i)+E(i)+I(i)+R(i)));
+    %heldTerm = (y(7*11+3)+y(7*13+3))/((y(7*11+3)+y(7*13+3)) + sigma(i));
     % inf to medical - saturation of medical facilities
     medTerm = omegaI(i)*exp(-(M(i)/Mmax(i))^2);
     % dS/dt
@@ -114,7 +119,7 @@ i = numOfCategories;
 j = (numOfStates)*(i-1);
     S(i) = y(j+1);
     E(i) = y(j+2);
-    I(i) = y(j+3);
+    I(i) = y(j+3)
     R(i) = y(j+4);
     M(i) = y(j+5);
     D(i) = y(j+6);
@@ -127,7 +132,8 @@ j = (numOfStates)*(i-1);
     alpha = reshape(alpha,numOfCategories,1);
     expTerm = beta(i,:)*(g + infVector + alpha.*expVector);
     % susc to held term - contact tracing
-    heldTerm = kappa(i)*sigma(i)*(I(i)/(1+I(i)))*(1/(1 + S(i)+E(i)+I(i)+R(i)));
+    heldTerm = kappa(i)*sigma(i)*(1/(1 + S(i)+E(i)+I(i)+R(i)));
+    %heldTerm=kappa(i)*RelBetas(i,:).*(I/(I+1))*(1/(1 + S(i)+E(i)+I(i)+R(i)));
     %heldTerm = (y(7*11+3)+y(7*13+3))/((y(7*11+3)+y(7*13+3)) + sigma(i));
     % inf to medical - saturation of medical facilities
     medTerm = omegaI(i)*exp(-(M(i)/Mmax(i))^2);

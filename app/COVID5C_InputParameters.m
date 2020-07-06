@@ -1,4 +1,97 @@
-% Estimate the beta values.
+function [pop,Betas, RelBetas, pars]=COVID5C_InputParameters(soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, propNC, scaletracking, incAsymp,scale_beta)
+
+%% Set parameters for single class COVID model using LA County Data
+
+%1 - overwritten incAsymp
+%alpha=  .75;
+%2 susc to exp
+beta =  2.2625e-09; 
+%3 inf to rec
+deltaI = 0.081961233707576;
+%4 med/quar to rec
+deltaM =   0.0129;
+%5 exp to infected 
+gammaE =  .0081; 
+%6 exp to recovered
+gammaR =  0.039640136674653; 
+%7 tracing effectiveness (between 0 and 1) -- overwritten scaletracking
+%kappa = 0; 
+%8 Max hospital capacity parameter (this is the "leveling off" value from the data)
+Mmax =  2089; 
+%9 inf to dead
+muI =    1.32e-05;
+%10 med/quar to dead
+muM =  .0115; 
+%11 inf to med/quar
+omegaI =   0.0146; 
+%12 held to susc
+rhoS = 1/14;
+%13 contacts per infected person per day
+sigma = 10; 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% LA County Data - June 13, 2020 through June 30, 2020
+% ConfCase = [74123,74717,76679,78486,80574,82623,84549,86072,86934,89210,91562,93959,96641,99008,100526,101070,101768,101945];
+% Deaths = [2833,2857,2886,2909,2946,2968,3001,3030,3053,3075,3090,3119,3138,3154,3170,3191,3210,3224];
+% Hpatient_rev = [2538, 2511, 2465, 2316, 2296, 2237, 2283, 2259, 2090, 2001, 1969, 1920, 1900, 1958, 1947, 1956, 1797, 1768];
+% Hpatient = fliplr(Hpatient_rev);
+% ten_dayCum = 13615;
+% CumTo10DayStart = 60508;
+%Total Population considered for outbreak
+    TotalPopulation = 9651332; 
+% Find factors to scale parameters in the 
+% low (< 65)  versus high-risk  (>=65) age groups
+% The affected parameters are omega_I, omega_H, mu_I, mu_H, delta_I,
+% delta_M 
+% These numbers are from the LA County public health website, July 4, 2020
+pop_old  = 1172554;  % over 65
+pop_mid = 3149516; % 41 to 65
+pop_younger  = 3232266; % 18 to 40
+pop_young = pop_mid + pop_younger;
+cases_old = 13728;
+cases_mid = 37287;
+cases_younger = 42983; % 18 to 40
+% cases_youngest = 7972; % < 18
+cases_young = cases_mid+cases_younger;
+deaths_old = 2436;
+deaths_mid = 698;
+deaths_younger = 94;
+deaths_young = deaths_mid + deaths_younger;
+frac_mu = (deaths_old/cases_old)/(deaths_young/cases_young);
+% PREVIOUSLY %%%%%%%%%%
+% Assume that the hospitalization (omega) and  death (mu)  rate for
+% college-age students is .1* rate for <65 population.
+% UPDATED %%%%%%%%%
+% using 18 to 40 versus 40 to 65
+frac_mu_student = (deaths_younger/cases_younger)/(deaths_mid/cases_mid);
+
+% for the length of hospital stay, used LA County data, see
+% RacialEthnicSocioeconomicDataCOVID19, through April 12
+pop_low = 227;
+stay_length_low = 5.04;
+pop_high = 70;
+stay_length_high = 6.60;
+total_pop_hosp = pop_low + pop_high;
+frac_delta = stay_length_low/stay_length_high;
+% using data from LA County for length of hospital stay
+stay_length_student = 2;
+frac_delta_student  =  stay_length_low/stay_length_student;
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Estimate the beta values.
 % Estimate the mu (death rates) values and omegas (hospitalization rates)
 
 % Extract estimated beta and population to get beta_star, the ``base"
@@ -7,6 +100,7 @@
 % defined.
 beta_star = beta*TotalPopulation;
 
+beta_star=scale_beta*beta_star;
 %% Number the different communities:
 
 
@@ -35,9 +129,9 @@ staff_pop = StaffPops(5:8);
 % Student data from the Google sheet - should be checked
 PomonaStudentPop = 1607;
 PitzerStudentPop = 1025;
-CMCStudentPop = 1254;
-ScrippsStudentPop = 990;
-HMCStudentPop = 807;
+% CMCStudentPop = 1254;
+% ScrippsStudentPop = 990;
+% HMCStudentPop = 807;
 StudentPop = PomonaStudentPop + PitzerStudentPop;  % only use these for now
 % Population vector: start with all students non-compliant.
 % Since we divide by this vector, make sure all entries are at least one.
@@ -104,27 +198,10 @@ RelBetas(2,10)=NC_LSC; RelBetas(4,10)=NC_LSC; RelBetas(6,10)=NC_LSC; RelBetas(8,
 
 RelBetas(9,9)=C_C; RelBetas(10,9)=C_NC; RelBetas(9,10)=NC_C; RelBetas(10,10)=NC_NC;
 
-
-% RelBetas(10,10) = 10;  % non-compliant to non-compliant
-% RelBetas(9,10) = 5;
-% RelBetas(1,10) = 3;
-% RelBetas(3,10) = 3;
-% RelBetas(5,10) = 3;
-% RelBetas(7,10) = 3;
-% RelBetas(2,10) = 1;
-% RelBetas(4,10) = 1;
-% RelBetas(6,10) = 1;
-% RelBetas(8,10) = 1;
-% RelBetas(:,9) = .5; % lower?
-% RelBetas(10,9) = 5; 
 % Multiply by Beta_Star, and divide by population of the group containing
 % the susceptibles, i.e. group j for Beta_{ij}
 
-RelBetas = 10*RelBetas;
-
-% for i =1:length(RelBetas(:,1))
-%     Betas(:,i) = beta_star*RelBetas(:,i)./pop';
-% end
+Betas = basevalue*ones(Ngroups,Ngroups);
 
 % Betas divide by their larger class (e.g. admin/teach and staff)
 for i = 1:4
@@ -132,7 +209,7 @@ for i = 1:4
     Betas(:,i+4) = beta_star*RelBetas(:,i+4)/sum(staff_pop);
 end
 % Betas divide by their larger class (students)
-for i = 1:2
+for i = 9:10
     Betas(:,i) = beta_star*RelBetas(:,i)/StudentPop;
 end
 
@@ -156,15 +233,15 @@ muM_student= muM_low*frac_mu_student;
 muM_vec = mult;
 muM_vec([1,2,5,6]) = muM_high;
 muM_vec([3,4,7,8]) = muM_low;
-muM_vec([9,10]) = muI_student;
+muM_vec([9,10]) = muM_student;
 %%
-omegaH_low = omegaH * low_weight;
-omegaH_high = omegaH_low*frac_mu;
-omegaH_student= omegaH_low*frac_mu_student;
-omegaH_vec = mult;
-omegaH_vec([1,2,5,6]) = omegaH_high;
-omegaH_vec([3,4,7,8]) = omegaH_low;
-omegaH_vec([9,10]) = omegaH_student;
+% omegaH_low = omegaH * low_weight;
+% omegaH_high = omegaH_low*frac_mu;
+% omegaH_student= omegaH_low*frac_mu_student;
+% omegaH_vec = mult;
+% omegaH_vec([1,2,5,6]) = omegaH_high;
+% omegaH_vec([3,4,7,8]) = omegaH_low;
+% omegaH_vec([9,10]) = omegaH_student;
 %%
 omegaI_low = omegaI * low_weight;
 omegaI_high = omegaI_low*frac_mu;
@@ -193,15 +270,17 @@ deltaM_vec([9,10]) = deltaM_student;
 %% Make a matrix of parameters values, one row for each parameter.  Beta values is its own matrix, Betas
 n_parameters = 13;
 pars = ones(n_parameters,Ngroups);
+pars(1,:) = pars(1,:)*incAsymp;
 pars(2,:) = deltaI_vec;
 pars(3,:) = deltaM_vec;
 pars(4,:) = pars(4,:)*gammaE;
 pars(5,:) = pars(5,:)*gammaR;
-pars(6,:) = pars(6,:)*kappa;
+pars(6,:) = pars(6,:)*scaletracking;
 pars(7,:) = pars(7,:)*Mmax;
 pars(8,:) = muI_vec;
 pars(9,:) = muM_vec;
 pars(10,:) = omegaI_vec;
-pars(1,:) = pars(12,:)*rhoS;
-pars(13,:) = pars(13,:)*sigma;
-pars(14,:) = pars(14,:)*g;
+pars(11,:) = pars(11,:)*rhoS;
+pars(12,:) = pars(12,:)*sigma;
+pars(13,:)=[soATHR, soATHR, soATLR, soATLR, soStaffHR, soStaffHR, soStaffLR, soStaffLR,  soSC, soSNC] / 7;   
+% List order: AdminTeac HR HSC, LSC; LR HSC, LSC;  Staff HR HSC, LSC; LR HSC, LSC; S LR C, S LR NC)
