@@ -1,4 +1,4 @@
-classdef ModelResults
+classdef DailyResults
     properties (Access = public)
         t
         y
@@ -12,7 +12,7 @@ classdef ModelResults
         Held
     end
     methods
-        function obj = ModelResults(t, y)
+        function obj = DailyResults(t, y)
             obj.t = t;
             obj.y = y;
             
@@ -102,8 +102,35 @@ classdef ModelResults
             obj.Med = [medAT_hr, medAT_lr, medStaff_hr, medStaff_lr, medStud_c, medStud_nc];
             obj.Dead = [deadAT_hr, deadAT_lr, deadStaff_hr, deadStaff_lr, deadStud_c, deadStud_nc];
             obj.Held = [heldAT_hr, heldAT_lr, heldStaff_hr, heldStaff_lr, heldStud_c, heldStud_nc];
+            
+            
+            %% either:
+            %obj.Susceptibles_C = %... [susAT_hr, susAT_lr, susStaff_hr, susStaff_lr, susStud_c, susStud_nc];
+            %obj.Exposed_C = %..  [expAT_hr, expAT_lr, expStaff_hr, expStaff_lr, expStud_c, expStud_nc];
+            %obj.Infected_C = %..[infAT_hr, infAT_lr, infStaff_hr, infStaff_lr, infStud_c, infStud_nc];
+            %obj.Recovered_C = %..[recAT_hr, recAT_lr, recStaff_hr, recStaff_lr, recStud_c, recStud_nc];
+            %obj.Med_C = %..[medAT_hr, medAT_lr, medStaff_hr, medStaff_lr, medStud_c, medStud_nc];
+            %obj.Dead_C = %..[deadAT_hr, deadAT_lr, deadStaff_hr, deadStaff_lr, deadStud_c, deadStud_nc];
+            %obj.Held_C = %..[heldAT_hr, heldAT_lr, heldStaff_hr, heldStaff_lr, heldStud_c, heldStud_nc];
         end
         
+         function z = selectDailyPops(obj, selection)
+            
+            % Possible selections: vector of 1's and 0's representing inclusion of
+            % TA_hr, TA_lr, Staff_hr, Staff_lr, Stu_compliant, Stu_noncompliant
+            n_select = length(selection);
+            % Make "selection" a column vector
+            s = reshape(selection, n_select,1);
+            z = PlotData(obj.Susceptibles * s, ...
+                obj.Exposed *s, ...
+                obj.Infected *s, ...
+                obj.Recovered *s, ...
+                obj.Med *s, ...
+                obj.Dead *s, ...
+                obj.Held *s);
+        end % selectPops
+        
+                
          function z = selectPops(obj, selection)
             
             % Possible selections: vector of 1's and 0's representing inclusion of
