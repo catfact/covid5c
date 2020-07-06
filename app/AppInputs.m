@@ -21,6 +21,7 @@ classdef AppInputs
         propNC
         scaleTracking
         incAsymp
+        betaScaling
         
     end
     
@@ -47,6 +48,7 @@ classdef AppInputs
             obj.propNC = 100;
             obj.scaleTracking = 100;
             obj.incAsymp = 100;
+            obj.betaScaling = 100;
         end
     end
     

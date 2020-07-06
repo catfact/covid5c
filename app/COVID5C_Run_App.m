@@ -6,7 +6,7 @@
 
 function [t,y]=COVID5C_Run_App(icATExpHR, icATRecHR,icATExpLR, icATRecLR, ...
                                 icStaffExpHR,icStaffRecHR,icStaffExpLR,icStaffRecLR,  icSExpC, icSRecC,icSExpNC, icSRecNC, ...
-                                soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, propNC, scaletracking, incAsymp)
+                                soATHR, soATLR, soStaffHR, soStaffLR,  soSC, soSNC, propNC, scaletracking, incAsymp, betaScaling)
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 %--Get parameters-------------------------------------------------------------------------------------------------------------------------------------------------
 %-----------------------------------------------------------------------------------------------------------------------------------------------------------------
